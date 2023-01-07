@@ -1,0 +1,21 @@
+# Copyright 2023 jwalkiew
+# Author: jwalkiew
+
+version: "3.9"
+services:
+  kwscanner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    image: ${DOCKER_IMAGE}
+    volumes:
+      - type: bind
+        source: ${OUT_DIR}
+        target: "/opt/kwscanner/out/"
+        read_only: false
+    command: python -m kwscanner ${KW_CODE} ${KW_START_NUMBER} ${KW_END_NUMBER}
+    deploy:
+      restart_policy:
+        condition: on-failure
